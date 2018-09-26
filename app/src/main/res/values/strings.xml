@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Exchange</string>
+    <string name="main_lbl_Quantity">Quantity</string>
+    <string name="main_lbl_OgCurrency">Original currency</string>
+    <string name="main_rdb_Euro">Euro</string>
+    <string name="main_rdb_Dollar">Dolar</string>
+    <string name="main_rdb_Pound">Pound</string>
+    <string name="main_lbl_FinalCurrency">Final currency</string>
+    <string name="main_btn_Convert">Convert</string>
 </resources>
