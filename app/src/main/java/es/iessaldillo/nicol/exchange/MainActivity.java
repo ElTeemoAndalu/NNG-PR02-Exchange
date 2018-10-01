@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         stringOftxtAmount = txtAmount.getText().toString();
         defaultAmount = "0.00";
 
-        if (!stringOftxtAmount.equals(".") && stringOftxtAmount.equals("")) {
+        if (!stringOftxtAmount.equals(".") && !stringOftxtAmount.equals("")) {
             result = convertStrToDbl(txtAmount.getText().toString());
             toastText = "" + result;
 
@@ -168,7 +168,8 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
             txtAmount.setText(defaultAmount);
         }
 
-        if (convertStrToDbl(stringOftxtAmount) == 0.00) {
+
+        if (!stringOftxtAmount.equals("0.00")) {
             Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
         }
 
