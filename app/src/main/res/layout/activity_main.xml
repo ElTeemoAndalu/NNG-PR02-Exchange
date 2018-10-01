@@ -5,7 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginTop="@dimen/extraMargin"
+    android:layout_marginLeft="@dimen/extraMargin"
+    android:layout_marginRight="@dimen/extraMargin">
 
     <TextView
         android:id="@+id/lblAmount"
@@ -19,13 +22,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"
-        android:gravity="right"/>
+        android:gravity="right"
+        android:text="0.00"/>
 
     <TextView
         android:id="@+id/lblFromCurrency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/main_lblFromCurrency"/>
+        android:text="@string/main_lblFromCurrency"
+        android:layout_marginTop="@dimen/extraMargin"/>
 
     <RadioGroup
         android:id="@+id/rgFromCurrency"
@@ -43,23 +48,28 @@
             android:text="@string/main_rbDollar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:enabled="false"/>
+            android:enabled="false"
+            android:layout_marginLeft="@dimen/normalMargin"/>
         <RadioButton
             android:id="@+id/rbFromPound"
             android:text="@string/main_rbPound"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/normalMargin"/>
         <ImageView
             android:id="@+id/imgFrom"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_euro"
+            android:layout_marginLeft="@dimen/extraMargin"/>
     </RadioGroup>
 
     <TextView
         android:id="@+id/lblToCurrency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/main_lblToCurrency"/>
+        android:text="@string/main_lblToCurrency"
+        android:layout_marginTop="@dimen/extraMargin"/>
 
     <RadioGroup
         android:id="@+id/rgToCurrency"
@@ -77,22 +87,27 @@
             android:text="@string/main_rbDollar"
             android:checked="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/normalMargin"/>
         <RadioButton
             android:id="@+id/rbToPound"
             android:text="@string/main_rbPound"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/normalMargin"/>
         <ImageView
             android:id="@+id/imgTo"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_dollar"
+            android:layout_marginLeft="@dimen/extraMargin"/>
     </RadioGroup>
 
     <Button
         android:id="@+id/btnExchange"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/main_btnExchange"/>
+        android:text="@string/main_btnExchange"
+        android:layout_marginTop="@dimen/extraMargin"/>
 
 </LinearLayout>

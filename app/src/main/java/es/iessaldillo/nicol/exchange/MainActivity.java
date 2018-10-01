@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Se inicializan las vistas y los valores de cambio de moneda
         initViews();
         establishCurrencyRates();
     }
@@ -42,20 +43,25 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         imgFrom = ActivityCompat.requireViewById(this,R.id.imgFrom);
         imgTo = ActivityCompat.requireViewById(this,R.id.imgTo);
 
-        imgFrom.setImageResource(R.drawable.ic_euro);
-        imgTo.setImageResource(R.drawable.ic_dollar);
-
         rgFromCurrency.setOnCheckedChangeListener(this);
         rgToCurrency.setOnCheckedChangeListener(this);
         btnExchange.setOnClickListener(v -> exchange());
+        txtAmount.setOnClickListener(v -> txtAmount.selectAll());
     }
 
+    //Establece los valores que se usarán para el calculo de cambio de moneda
+    //En el futuro esta parte se cambiará por valores extraídos de internet
+    // y se actualizarán con el inicio de la aplicación.
     private void establishCurrencyRates() {
         changeEuroDollar = 1.16;
         changeEuroPound = 0.89;
         changeDollarPound = 0.77;
     }
 
+    //Simplemente activa los radio botones previamente desactivados
+    // y desactiva los de las monedas seleccionadas con cada cambio (a través de otra función).
+    //Y también va alternando entre los distintos símbolos de las monedas seleccionadas
+    // en cada grupo cuando se hacen cambios.
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
 
@@ -92,6 +98,8 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
 
     }
 
+    //Subfunción de la anterior. Detecta el botón desactivado del grupo que se le pase, lo activa y finalmente
+    //desactiva el botón que también se le pasa, que será el que se ha seleccionado en el grupo opuesto
     private void updateRadioButtons(RadioButton radiobutton, RadioGroup group) {
             for (int i = 0; i < group.getChildCount(); i++) {
                 if(!group.getChildAt(i).isEnabled()){
@@ -104,39 +112,70 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
 
     }
 
-
-
+    //Detecta que monedas han sido seleccionadas en los dos grupos disponibles, realiza el cálculo en función
+    //de ello y finalmente muestra un mensaje con el resultado.
     private void exchange() {
 
         int fromRbChecked,rbToChecked;
         double result;
-        String toastText;
+        String toastText,stringOftxtAmount,defaultAmount;
 
-        result = Double.parseDouble(txtAmount.getText().toString());
-        toastText = "" + result;
+        stringOftxtAmount = txtAmount.getText().toString();
+        defaultAmount = "0.00";
 
-        fromRbChecked = rgFromCurrency.getCheckedRadioButtonId();
-        rbToChecked = rgToCurrency.getCheckedRadioButtonId();
+        if (!stringOftxtAmount.equals(".") && stringOftxtAmount.equals("")) {
+            result = convertStrToDbl(txtAmount.getText().toString());
+            toastText = "" + result;
 
-        if(fromRbChecked == rbFromEuro.getId() && rbToChecked == rbToDollar.getId()){
-            result *= changeEuroDollar;
-        }else if(fromRbChecked == rbFromEuro.getId() && rbToChecked == rbToPound.getId()){
-            result *= changeEuroPound;
-        }else if(fromRbChecked == rbFromDollar.getId() && rbToChecked == rbToEuro.getId()){
-            result /= changeEuroDollar;
-        }else if(fromRbChecked == rbFromDollar.getId() && rbToChecked == rbToPound.getId()){
-            result *= changeDollarPound;
-        }else if(fromRbChecked == rbFromPound.getId() && rbToChecked == rbToEuro.getId()){
-            result /= changeEuroPound;
+            fromRbChecked = rgFromCurrency.getCheckedRadioButtonId();
+            rbToChecked = rgToCurrency.getCheckedRadioButtonId();
+
+            if(fromRbChecked == rbFromEuro.getId()){
+                toastText += "\u20ac";
+                if(rbToChecked == rbToDollar.getId()){
+                    result *= changeEuroDollar;
+                }else{
+                    result *= changeEuroPound;
+                }
+            }else if(fromRbChecked == rbFromDollar.getId()){
+                toastText += "\u0024";
+                if(rbToChecked == rbToEuro.getId()){
+                    result /= changeEuroDollar;
+                }else{
+                    result *= changeDollarPound;
+                }
+            }else{
+                toastText += "\u00a3";
+                if(rbToChecked == rbToEuro.getId()){
+                    result /= changeEuroPound;
+                }else{
+                    result /= changeDollarPound;
+                }
+            }
+
+            result = Math.round(result * 100.0) / 100.0;
+            ;
+            toastText += " -> " + result;
+
+            if (rbToChecked == rbToEuro.getId())
+                toastText += "\u20ac";
+            else if (rbToChecked == rbToDollar.getId())
+                toastText += "\u0024";
+            else
+                toastText += "\u00a3";
         }else{
-            result /= changeDollarPound;
+            toastText = "It is not a valid number. Resetting value.";
+            txtAmount.setText(defaultAmount);
         }
 
-        result = Math.round(result * 100.0) / 100.0;
+        if (convertStrToDbl(stringOftxtAmount) == 0.00) {
+            Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
+        }
 
-        toastText += " -> " + result;
+    }
 
-        Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
-
+    //Función para acortar el cambio de cadena a double
+    public double convertStrToDbl(String string){
+        return Double.parseDouble(string);
     }
 }
