@@ -1,7 +1,5 @@
 package es.iessaldillo.nicol.exchange;
 
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,10 +8,14 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener {
 
     private EditText txtAmount;
     private RadioGroup rgFromCurrency,rgToCurrency;
+    // SI SOLO LO USAS EN UN ÚNICO MÉTODO DEFÍNELO COMO LOCAL.
     private Button btnExchange;
     private RadioButton rbFromEuro,rbToEuro,rbToDollar,rbFromDollar,rbFromPound,rbToPound;
     private double changeEuroDollar,changeEuroPound, changeDollarPound;
@@ -47,6 +49,9 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         rgToCurrency.setOnCheckedChangeListener(this);
         btnExchange.setOnClickListener(v -> exchange());
         txtAmount.setOnClickListener(v -> txtAmount.selectAll());
+        // AGREGO ESTAS LÍNEAS PARA QUE PASE TESTS.
+        imgFrom.setTag(R.drawable.ic_euro);
+        imgTo.setTag(R.drawable.ic_dollar);
     }
 
     //Establece los valores que se usarán para el calculo de cambio de moneda
@@ -58,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         changeDollarPound = 0.77;
     }
 
+    // IN ENGLISH, PLEASE
     //Simplemente activa los radio botones previamente desactivados
     // y desactiva los de las monedas seleccionadas con cada cambio (a través de otra función).
     //Y también va alternando entre los distintos símbolos de las monedas seleccionadas
@@ -65,39 +71,52 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
 
+        // USA Code -> Reformat Code PARA QUE EL CÓDIGO QUEDE BONITO.
         if(group.getId() == rgFromCurrency.getId()){
 
             if (checkedId == rbFromEuro.getId()) {
                 updateRadioButtons(rbToEuro,rgToCurrency);
                 imgFrom.setImageResource(R.drawable.ic_euro);
+                // AGREGO ESTA LÍNEA PARA PASE TESTS
+                imgFrom.setTag(R.drawable.ic_euro);
 
             } else if(checkedId == rbFromDollar.getId()) {
                 updateRadioButtons(rbToDollar,rgToCurrency);
                 imgFrom.setImageResource(R.drawable.ic_dollar);
+                // AGREGO ESTA LÍNEA PARA PASE TESTS
+                imgFrom.setTag(R.drawable.ic_dollar);
 
             } else {
                 updateRadioButtons(rbToPound,rgToCurrency);
                 imgFrom.setImageResource(R.drawable.ic_pound);
+                // AGREGO ESTA LÍNEA PARA PASE TESTS
+                imgFrom.setTag(R.drawable.ic_pound);
             }
 
         }else{
             if (checkedId == rbToEuro.getId()) {
                 updateRadioButtons(rbFromEuro,rgFromCurrency);
                 imgTo.setImageResource(R.drawable.ic_euro);
+                // AGREGO ESTA LÍNEA PARA PASE TESTS
+                imgTo.setTag(R.drawable.ic_euro);
 
             } else if(checkedId == rbToDollar.getId()) {
                 updateRadioButtons(rbFromDollar,rgFromCurrency);
                 imgTo.setImageResource(R.drawable.ic_dollar);
+                // AGREGO ESTA LÍNEA PARA PASE TESTS
+                imgTo.setTag(R.drawable.ic_dollar);
 
             } else {
                 updateRadioButtons(rbFromPound,rgFromCurrency);
                 imgTo.setImageResource(R.drawable.ic_pound);
-
+                // AGREGO ESTA LÍNEA PARA PASE TESTS
+                imgTo.setTag(R.drawable.ic_pound);
             }
         }
 
     }
 
+    // ME GUSTA MUCHO ESTA IDEA.
     //Subfunción de la anterior. Detecta el botón desactivado del grupo que se le pase, lo activa y finalmente
     //desactiva el botón que también se le pasa, que será el que se ha seleccionado en el grupo opuesto
     private void updateRadioButtons(RadioButton radiobutton, RadioGroup group) {
@@ -123,6 +142,9 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         stringOftxtAmount = txtAmount.getText().toString();
         defaultAmount = "0.00";
 
+        // USA MEJOR TextUtils.equals EN VEZ DE equals(). SE CONTROLA AUTOMÁTICAMENTE EL NULL.
+        // LA COMPROBACIÓN PUEDES HACER SIMPLEMENTE CON UN try catch sobre el método Double
+        // .parseDouble()
         if (!stringOftxtAmount.equals(".") && !stringOftxtAmount.equals("")) {
             result = convertStrToDbl(txtAmount.getText().toString());
             toastText = "" + result;
@@ -131,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
             rbToChecked = rgToCurrency.getCheckedRadioButtonId();
 
             if(fromRbChecked == rbFromEuro.getId()){
+                // NO USES NÚMERO MÁGICOS. DEFINE CONSTANTES.
                 toastText += "\u20ac";
                 if(rbToChecked == rbToDollar.getId()){
                     result *= changeEuroDollar;
